@@ -1,5 +1,7 @@
 import fs from 'node:fs';
 import { pipeline } from 'node:stream/promises';
+import ThrottleRequest from './ThrottleRequest.js';
+
 const readable = fs.createReadStream('./resources/mock-data.csv', { encoding: 'utf8'})
 const writable = fs.createWriteStream('./resources/result.json');
 
@@ -45,6 +47,9 @@ function transform(callback) {
 
 }
 
+const throttle = new ThrottleRequest({
+    objectMode: true, flowRatePerSecond: 10000
+});
 
 /**
  * Main function for pipeline initialization
